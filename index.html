@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Каталог</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <h1 class="topbar__title">Каталог</h1>
+  <button id="cart-btn" class="cart-btn" aria-label="Корзина">
+    🛒 <span id="cart-count" class="cart-count" hidden>0</span>
+  </button>
+</header>
+
+<div class="search-row">
+  <input id="search-input" class="search-input" type="search" placeholder="Найти товар…" />
+</div>
+
+<main id="catalog" class="catalog" aria-live="polite">
+  <p class="state-msg" id="loading-msg">Загружаем каталог…</p>
+</main>
+
+<div id="load-more-wrap" class="load-more-wrap" hidden>
+  <button id="load-more-btn" class="load-more-btn">Показать ещё</button>
+</div>
+
+<!-- Карточка товара -->
+<div id="product-sheet" class="sheet" hidden>
+  <div class="sheet__backdrop" data-close></div>
+  <div class="sheet__panel">
+    <button class="sheet__close" data-close aria-label="Закрыть">✕</button>
+    <div id="product-sheet-content"></div>
+  </div>
+</div>
+
+<!-- Корзина -->
+<div id="cart-sheet" class="sheet" hidden>
+  <div class="sheet__backdrop" data-close></div>
+  <div class="sheet__panel">
+    <button class="sheet__close" data-close aria-label="Закрыть">✕</button>
+    <h2 class="sheet__title">Корзина</h2>
+    <div id="cart-items"></div>
+    <div class="promo-row">
+      <input id="promo-input" class="promo-input" type="text" placeholder="Промокод (если есть)" />
+      <p class="promo-hint">Скидку по коду применит менеджер вручную при подтверждении заказа</p>
+    </div>
+    <div class="cart-total">
+      Итого: <span id="cart-total-value">0 ₽</span>
+    </div>
+
+    <form id="checkout-form" class="checkout-form">
+      <input id="cf-name" class="cf-input" type="text" placeholder="Имя" required />
+      <input id="cf-phone" class="cf-input" type="tel" placeholder="Телефон" required />
+      <input id="cf-email" class="cf-input" type="email" placeholder="Email (если есть)" />
+      <input id="cf-address" class="cf-input" type="text" placeholder="Адрес доставки (если нужна)" />
+      <button type="submit" class="cf-submit">Оформить заказ</button>
+    </form>
+    <p id="checkout-status" class="state-msg" hidden></p>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
