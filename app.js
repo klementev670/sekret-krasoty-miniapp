@@ -1,7 +1,7 @@
 // ==== Настройки ====
 // Прокси на стороне бота (см. webapp_server.py) — ключ к сайту здесь не хранится,
 // он остаётся только на сервере бота. Подставить реальный https-адрес после публикации.
-const PROXY_BASE_URL = "https://removed-attain-unturned.ngrok-free.dev/api";
+const PROXY_BASE_URL = "https://laughing-zebra-q59779qr9vxcx74g-8080.app.github.dev/api";
 
 const PER_PAGE = 50;
 
@@ -42,11 +42,7 @@ const checkoutStatus = document.getElementById("checkout-status");
 
 // ==== Утилиты ====
 async function proxyFetch(path, options = {}) {
-  const headers = {
-    "Content-Type": "application/json",
-    "ngrok-skip-browser-warning": "true",
-    ...(options.headers || {}),
-  };
+  const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
   const res = await fetch(`${PROXY_BASE_URL}${path}`, { ...options, headers });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
