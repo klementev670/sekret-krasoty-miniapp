@@ -18,8 +18,26 @@ let currentQuery = "";
 let totalPages = 1;
 let isLoading = false;
 
+const CART_STORAGE_KEY = "sk_cart_v1";
+
 /** @type {Map<string, {product: object, qty: number}>} */
 const cart = new Map();
+
+function saveCart() {
+  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify([...cart.values()]));
+}
+
+function loadCart() {
+  try {
+    const raw = localStorage.getItem(CART_STORAGE_KEY);
+    const items = raw ? JSON.parse(raw) : [];
+    for (const { product, qty } of items) {
+      cart.set(String(product.id), { product, qty });
+    }
+  } catch {
+    // повреждённые данные в хранилище — начинаем с пустой корзины
+  }
+}
 
 // ==== DOM ====
 const catalogEl = document.getElementById("catalog");
@@ -81,7 +99,7 @@ async function loadCatalog({ reset = false } = {}) {
     if (currentQuery) params.set("search", currentQuery);
 
     const data = await proxyFetch(`/products?${params.toString()}`);
-    const items = data.items || [];
+    const items = (data.items || []).filter(isPurchasable);
     totalPages = data.total_pages || 1;
 
     loadedProducts = reset ? items : [...loadedProducts, ...items];
@@ -174,6 +192,7 @@ function addToCart(product) {
   const existing = cart.get(key);
   cart.set(key, { product, qty: existing ? existing.qty + 1 : 1 });
   updateCartBadge();
+  saveCart();
 }
 
 function changeQty(productId, delta) {
@@ -188,6 +207,7 @@ function changeQty(productId, delta) {
   }
   updateCartBadge();
   renderCart();
+  saveCart();
 }
 
 function updateCartBadge() {
@@ -273,6 +293,7 @@ checkoutForm.addEventListener("submit", async (e) => {
 
     cart.clear();
     updateCartBadge();
+    saveCart();
 
     setTimeout(() => {
       tg?.close();
@@ -301,4 +322,6 @@ document.querySelectorAll("[data-close]").forEach((el) => {
 });
 
 // ==== Старт ====
+loadCart();
+updateCartBadge();
 loadCatalog({ reset: true });
