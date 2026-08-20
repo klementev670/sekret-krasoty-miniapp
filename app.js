@@ -1,7 +1,7 @@
 // ==== Настройки ====
 // Прокси на стороне бота (см. webapp_server.py) — ключ к сайту здесь не хранится,
 // он остаётся только на сервере бота. Подставить реальный https-адрес после публикации.
-const PROXY_BASE_URL = "https://laughing-zebra-q59779qr9vxcx74g-8080.app.github.dev/api";
+const PROXY_BASE_URL = "https://stunning-memory-6xr99rg6rq9frv57-8080.app.github.dev/api";
 
 const PER_PAGE = 50;
 
