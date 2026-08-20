@@ -53,7 +53,6 @@ const productSheetContent = document.getElementById("product-sheet-content");
 const cartSheet = document.getElementById("cart-sheet");
 const cartItemsEl = document.getElementById("cart-items");
 const cartTotalEl = document.getElementById("cart-total-value");
-const promoInput = document.getElementById("promo-input");
 
 const checkoutForm = document.getElementById("checkout-form");
 const checkoutStatus = document.getElementById("checkout-status");
@@ -251,10 +250,6 @@ cartBtn.addEventListener("click", () => {
 });
 
 // ==== Оформление заказа ====
-// Важно: в API сайта нет метода проверки/применения промокода — только
-// создание заказа. Поэтому код здесь не валидируется, а просто попадает
-// в комментарий к заказу, менеджер применяет скидку вручную при подтверждении
-// (заказ и так создаётся со статусом "на удержании", это нормальная точка для этого).
 checkoutForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (cart.size === 0) return;
@@ -262,9 +257,6 @@ checkoutForm.addEventListener("submit", async (e) => {
   const submitBtn = checkoutForm.querySelector(".cf-submit");
   submitBtn.disabled = true;
   checkoutStatus.hidden = true;
-
-  const promoCode = promoInput.value.trim();
-  const comment = promoCode ? `Промокод (применить вручную): ${promoCode}` : "";
 
   const payload = {
     items: [...cart.values()].map(({ product, qty }) => ({ product_id: product.id, quantity: qty })),
@@ -275,7 +267,6 @@ checkoutForm.addEventListener("submit", async (e) => {
       address: document.getElementById("cf-address").value.trim(),
     },
     source: "telegram_bot",
-    comment,
   };
 
   try {
